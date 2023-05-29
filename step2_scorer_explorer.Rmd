@@ -116,13 +116,13 @@ B <- 1000 # Score total = ou > à B
 C <- 40 # Score moyen = ou > à C
 D <- 500 # Dans les cellules qui l'expriment, Score total = ou > à D
 E <- 25 # ans les cellules qui l'expriment, Score moyen = ou > à E
-
-# Préciser le nom du tissu en anglais :
-tissue_type <- "BRAIN"
 ```
 
 
 ```{r tissue_type, eval=FALSE, include=FALSE}
+# Préciser le nom du tissu en anglais :
+# tissue_type <- "BRAIN"
+
 # Ou autre méthode pour choisir le tissu
 # Liste des tissus de la Database M8
 tissue_list <- c("ORGANOGENESIS", "BRAIN", "CARDIAC", "AORTA", "BROWN_ADIPOSE", "LIMB", "KIDNEY", "HEART", "MARROW", "LIVER", "TONGUE", "UTERUS", "TRACHEA")
@@ -139,13 +139,16 @@ tissue_type <- tissue_list[tissue_number]
 # Rappel du tissu choisi
 cat("Choix :", tissue_type, "\n")
 
+# Retrait des colonnes qui ne correspondent pas au type de tissu choisi
+filtre_0 <- meta_coordinates_scorer %>% select(contains(tissue_type))
+
 ```
 
 
 ### Tri
 ```{r tri}
 # Filtre 0 : enlever les éventuelles valeurs NA, +Inf et -Inf.
-filtre_0 <- meta_coordinates_scorer
+# filtre_0 <- meta_coordinates_scorer
 filtre_0 [is.na(filtre_0)] <- 0
 filtre_0[filtre_0 == +Inf] <- 100
 filtre_0[filtre_0 == -Inf] <- 0
