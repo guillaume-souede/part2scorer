@@ -90,6 +90,7 @@ image <- names(objet_seurat@images)[1]
 # Récupérer les coordonnées X et Y de toutes les cellules présentes sur la coupe
 x_image <- objet_seurat@images[[image]]@coordinates[["imagerow"]]
 y_image <- objet_seurat@images[[image]]@coordinates[["imagecol"]]
+clusters <- meta_coordinates_scorer$seurat_clusters
 ```
 
 
@@ -153,7 +154,7 @@ filtre_0[filtre_0 == -Inf] <- 0
 filtre_0 <- filtre_0[, colSums(filtre_0 != 0) > 0]
 
 # Filtre A : Expression dans au moins A cellules
-filtre_A <- numeric[, colSums(numeric != 0) >= A]
+filtre_A <- filtre_0[, colSums(filtre_0 != 0) >= A]
 
 # Filtrage B : Score total d'au moins B
 filtre_B <- filtre_A[, colSums(filtre_A[, sapply(filtre_A, is.numeric)]) >= B]
@@ -168,7 +169,7 @@ filtre_D <- filtre_C[, colSums(filtre_C[, sapply(filtre_C, is.numeric)]) >= D]
 filtre_E <- filtre_D[, colMeans(filtre_D[sapply(filtre_D, is.numeric) > 0]) >= E]
 
 # Sortie du filtre :
-sortie_filtre <- cbind(x_image,y_image, sortie_filtre)
+sortie_filtre <- cbind(x_image,y_image, clusters, filtre_E)
 sortie_filtre %>% write_tsv("sortie_filtre.tsv")
 
 ```
