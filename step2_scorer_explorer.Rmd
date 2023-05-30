@@ -60,7 +60,7 @@ Ouvrir le dossier du SCORER dans un terminal. Faire :
 ./SingleCellSignatureScorer_Linux64_039.bin
 ```
 
-Dans le terminal, la database à utiliser avec le pavé numérique. 
+Dans le terminal, choisir la database à utiliser avec le pavé numérique. 
 
 Une fois les calculs terminés :
 Dans SingleCellSignatureScorer/results, récupérer la table .tsv obtenue. Par exemple : M8_table_brain.tsv
