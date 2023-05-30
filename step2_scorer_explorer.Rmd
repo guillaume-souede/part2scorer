@@ -181,7 +181,6 @@ En sortie, on récupère un fichier sortie_filtre.tsv.
 
 # 4. Single-Cell spatial Explorer
 ## 4.1 Préparer les fichiers
-Placer le fichier sortie_filtre.tsv.
 Dans spatial-main/data : effacer le .tsv de test, et placer sortie_filtre.tsv.
 Dans spatial-main/image : effacer l'image de test, et placer l'image hires ou lowres (au choix) issue du dossier Spatial imaging data. 
 
