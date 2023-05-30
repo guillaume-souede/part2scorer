@@ -198,11 +198,11 @@ cat("Hires factor =", objet_seurat@images[[image]]@scale.factors[["hires"]], "\n
 cat("Lowres factor =", objet_seurat@images[[image]]@scale.factors[["lowres"]], "\n")
 ```
 
-Rotate : +90° pour les Data issues de 10x Genomics data.
-X coordinates : x_image
-Y coordinates : y_image
-Cluster column : seurat_clusters
-Cluster dots diametet : 10
+Rotate : +90° pour les Data issues de 10x Genomics data.  
+X coordinates : x_image. 
+Y coordinates : y_image.
+Cluster column : seurat_clusters. 
+Cluster dots diametet : 10. 
 
 
 ### 4.2.2 Affichage des clusters
