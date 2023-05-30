@@ -125,7 +125,8 @@ E <- 25 # ans les cellules qui l'expriment, Score moyen = ou > à E
 
 # Ou autre méthode pour choisir le tissu
 # Liste des tissus de la Database M8
-tissue_list <- c("ORGANOGENESIS", "BRAIN", "CARDIAC", "AORTA", "BROWN_ADIPOSE", "LIMB", "KIDNEY", "HEART", "MARROW", "LIVER", "TONGUE", "UTERUS", "TRACHEA")
+tissue_list <- c("UTERUS", "TRACHEA", "TONGUE", "THYMUS", "SUBCUTANEOUS_ADIPOSE", "SPLEEN", "SKIN", "PANCREAS", "MESENTERIC_ADIPOSE", "MARROW", "MAMMARY_GLAND", "LUNG", "LIVER", "LIMB", "LARGE_INTESTINE", "HEART", "GONADAL_ADIPOSE", "ADIPOSE", "DIAPHRAGM", "BRAIN", "BRAIN_NON_MYELOID", "BRAIN_MYELOID", "BLADDER", "AORTA", "ORGANOGENESIS", "NOTOCHORD", "NEURAL")
+
 
 # Affichage des choix :
 cat("Choix du tissu:\n")
