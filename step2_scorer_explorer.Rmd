@@ -73,7 +73,7 @@ Cliquer sur "Upload", choisir la table .tsv issue du SCORER.
 Faire de même pour les meta_coordinates (vignette précédente, ST scRNAseq 1ère partie).
 Lecture des deux tables.
 ```{r import SCORER}
-scorer = read_tsv("M8_table_brain.tsv", col_names = T)
+scorer = read_tsv("M8_table_objet_seurat.tsv", col_names = T)
 meta_coordinates = read_tsv("meta_coordinates.tsv", col_names = T)
 ```
 
