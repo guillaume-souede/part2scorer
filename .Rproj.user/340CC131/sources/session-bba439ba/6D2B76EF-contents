@@ -21,13 +21,49 @@ options(Seurat.object.assay.version = "v5")
 # source(knitr::purl("vignette1.rmd", quiet=TRUE))
 ```
 
-```{r Charger objet Seurat}
-genomics = "/DATA/GitHub/step1_seurat"
-bc_matrix.h5 = "Visium_FFPE_Mouse_Brain_filtered_feature_bc_matrix.h5"
-objet_seurat <- Load10X_Spatial(
-  genomics,
-  bc_matrix.h5,
-)
+
+```{r donnees, echo=TRUE}
+dataset_number <- as.integer(readline(prompt=paste("Choix du jeu de données:\n",
+                                                   "1: Brain\n",
+                                                   "2: Brain (Seurat, anterior1)\n",
+                                                   "3: Kidney\n",
+                                                   sep = "")))
+# ou modifier directement la valeur : 
+dataset_number <- 1
+
+load_data <- function(dataset_number) {
+
+  if (dataset_number == 1) {
+    genomics <- "data/brain"
+    bc_matrix.h5 <- "Visium_FFPE_Mouse_Brain_filtered_feature_bc_matrix.h5"
+    objet_seurat <- Load10X_Spatial(genomics, bc_matrix.h5)
+  } else if (dataset_number == 2) {
+    if (!"SeuratData" %in% installed.packages()) {
+    install.packages("SeuratData")
+    }
+    library(SeuratData)
+    if (!"stxBrain" %in% InstalledData()) {
+    InstallData("stxBrain")
+    }
+    data("stxBrain")
+    objet_seurat <- LoadData("stxBrain", type = "anterior1")
+    objet_seurat[["Spatial"]] <- as(objet_seurat[["Spatial"]], Class = "Assay")
+  } else if (dataset_number == 3) {
+    genomics <- "data/kidney"
+    bc_matrix.h5 <- "Visium_FFPE_Mouse_Kidney_filtered_feature_bc_matrix.h5"
+    objet_seurat <- Load10X_Spatial(genomics, bc_matrix.h5)
+  } else {
+    stop("Choix invalide.")
+  }
+  return(objet_seurat)
+}
+
+objet_seurat <- load_data(dataset_number)
+
+```
+
+
+```{r calculs, echo=T}
 objet_seurat <- SCTransform(objet_seurat, assay = "Spatial", verbose = FALSE)
 objet_seurat <- RunPCA(objet_seurat, assay = "SCT", verbose = FALSE)
 objet_seurat <- FindNeighbors(objet_seurat, reduction = "pca", dims = 1:30)
@@ -72,7 +108,7 @@ Dans SingleCellSignatureScorer/results, récupérer la table .tsv obtenue. Par e
 Cliquer sur "Upload", choisir la table .tsv issue du SCORER. 
 Faire de même pour les meta_coordinates (vignette précédente, ST scRNAseq 1ère partie).
 Lecture des deux tables.
-```{r import SCORER}
+```{r import SCORER, echo=T}
 scorer = read_tsv("M8_table_objet_seurat.tsv", col_names = T)
 meta_coordinates = read_tsv("meta_coordinates.tsv", col_names = T)
 ```
@@ -81,7 +117,7 @@ meta_coordinates = read_tsv("meta_coordinates.tsv", col_names = T)
 ## 3.2 Traitement du fichier
 
 Cet étape permet de récupérer les données liées à l'objet_seurat.
-```{r traitement 0, eval=FALSE, include=FALSE}
+```{r pretraitement, eval=FALSE, include=FALSE}
 # Récupérer le nom de la coupe/image spatiale utilisée par R:
 image <- names(objet_seurat@images)[1]
 # ou 
@@ -125,7 +161,12 @@ E <- 25 # ans les cellules qui l'expriment, Score moyen = ou > à E
 
 # Ou autre méthode pour choisir le tissu
 # Liste des tissus de la Database M8
-tissue_list <- c("UTERUS", "TRACHEA", "TONGUE", "THYMUS", "SUBCUTANEOUS_ADIPOSE", "SPLEEN", "SKIN", "PANCREAS", "MESENTERIC_ADIPOSE", "MARROW", "MAMMARY_GLAND", "LUNG", "LIVER", "LIMB", "LARGE_INTESTINE", "HEART", "GONADAL_ADIPOSE", "ADIPOSE", "DIAPHRAGM", "BRAIN", "BRAIN_NON_MYELOID", "BRAIN_MYELOID", "BLADDER", "AORTA", "ORGANOGENESIS", "NOTOCHORD", "NEURAL")← 
+tissue_list <- c("UTERUS", "TRACHEA", "TONGUE", "THYMUS", "SUBCUTANEOUS_ADIPOSE", 
+                 "SPLEEN", "SKIN", "PANCREAS", "MESENTERIC_ADIPOSE", "MARROW", 
+                 "MAMMARY_GLAND", "LUNG", "LIVER", "LIMB", "LARGE_INTESTINE", 
+                 "HEART", "GONADAL_ADIPOSE", "ADIPOSE", "DIAPHRAGM", "BRAIN", 
+                 "BRAIN_NON_MYELOID", "BRAIN_MYELOID", "BLADDER", "AORTA", 
+                 "ORGANOGENESIS", "NOTOCHORD", "NEURAL")
 # tous les tissus y sont !!
 
 # Affichage des choix :
@@ -198,7 +239,7 @@ cat("Hires factor =", objet_seurat@images[[image]]@scale.factors[["hires"]], "\n
 cat("Lowres factor =", objet_seurat@images[[image]]@scale.factors[["lowres"]], "\n")
 ```
 
-Rotate : +90° pour les Data issues de 10x Genomics data.  
+Rotate : +90° pour les Data issues de 10x Genomics data.    
 X coordinates : x_image. 
 Y coordinates : y_image.
 Cluster column : seurat_clusters. 
