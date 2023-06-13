@@ -22,7 +22,7 @@ options(Seurat.object.assay.version = "v5")
 ```
 
 ```{r Charger objet Seurat}
-genomics = "/DATA/GitHub/step1_seurat"
+genomics = "~/GitHub/part2scorer/data/brain"
 bc_matrix.h5 = "Visium_FFPE_Mouse_Brain_filtered_feature_bc_matrix.h5"
 objet_seurat <- Load10X_Spatial(
   genomics,
