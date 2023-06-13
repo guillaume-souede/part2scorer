@@ -1,8 +1,9 @@
 ---
-title: 'ST scRNAseq 2e partie : Prétraitement Visualisation & Visualisation'
+title: "ST scRNAseq 2e partie : Prétraitement Visualisation & Visualisation"
 author: "Guillaume SOUEDE"
 date: "01 juin 2023"
-output: pdf_document
+format: pdf
+editor: visual
 ---
 
 
@@ -16,8 +17,8 @@ options(Seurat.object.assay.version = "v5")
 # source(knitr::purl("vignette1.rmd", quiet=TRUE))
 ```
 
-```{r chargement}
-genomics = "data/brain"
+```{r Charger objet Seurat}
+genomics = "~/GitHub/part2scorer/data/brain"
 bc_matrix.h5 = "Visium_FFPE_Mouse_Brain_filtered_feature_bc_matrix.h5"
 objet_seurat <- Load10X_Spatial(
   genomics,
@@ -68,7 +69,7 @@ Cliquer sur "Upload", choisir la table .tsv issue du SCORER.
 Faire de même pour les meta_coordinates (vignette précédente, ST scRNAseq 1ère partie).
 Lecture des deux tables.
 ```{r import SCORER}
-scorer = read_tsv("mydata/brain/M8_table_objet_seurat.tsv", col_names = T)
+scorer = read_tsv("mydata/seurat/M8_table_objet_seurat.tsv", col_names = T)
 ```
 
 
@@ -106,10 +107,10 @@ meta_coordinates_scorer$orig.ident <- NULL
 Dans cette étape, il faut filtrer les Pathways avec des valeurs déterminées. Le filtre doit correspondre à la biologie de l'objet_seurat utilisé.
 ```{r choix tri}
 A <- 5 # Expression dans au moins A cellules
-B <- 300 # Score total = ou > à B
-C <- 20 # Score moyen = ou > à C
-D <- 30 # Dans les cellules qui l'expriment, Score total = ou > à D
-E <- 25 # Dans les cellules qui l'expriment, Score moyen = ou > à E
+B <- 10 # Score total = ou > à B
+C <- 0.1 # Score moyen = ou > à C
+D <- 0 # Dans les cellules qui l'expriment, Score total = ou > à D
+E <- 0.5 # Dans les cellules qui l'expriment, Score moyen = ou > à E
 ```
 
 
@@ -150,10 +151,6 @@ filtre_0[filtre_0 == -Inf] <- 0
 
 # et enlever les Pathways qui ont un score d'expression nul pour toutes les cellules étudiées
 filtre_0 <- filtre_0[, colSums(filtre_0 != 0) > 0]
-
-# Possibilité de récupérer table complète AVANT filtrage
-pre_filtre <- cbind(x_image, y_image, clusters, filtre_0)
-pre_filtre %>% write_tsv("pre_filtre.tsv")
 
 # Filtre A : Expression dans au moins A cellules
 filtre_A <- filtre_0[, colSums(filtre_0 != 0) >= A]
@@ -196,25 +193,21 @@ cat("Hires factor =", objet_seurat@images[[image]]@scale.factors[["hires"]], "\n
 # cat("Lowres factor =", objet_seurat@images[[image]]@scale.factors[["lowres"]], "\n")
 ```
 
-```{r}
-cat("Hires factor =0.07287567")
-```
-
-
 Rotate : +90° pour les Data issues de 10x Genomics data.  
-X coordinates : x_image.  
-Y coordinates : y_image.  
-Cluster column : seurat_clusters.   
-Cluster dots diameter : 10.   
+X coordinates : x_image. 
+Y coordinates : y_image.
+Cluster column : seurat_clusters. 
+Cluster dots diameter : 10. 
 
 
 ### 4.2.2 Affichage des clusters
-Show Clusters  
+Show Clusters
 ! Permet de vérifier si la table .tsv est conforme, sinon plantage !
 
 ### 4.2.3 Expression
 Choisir une pathway, une palette, et cliquer sur "Plot Expression".
 OU utiliser la fonction "Slide Show".
+
 
 
 
